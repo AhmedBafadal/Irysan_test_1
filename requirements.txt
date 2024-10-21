@@ -1,0 +1,7 @@
+netCDF4
+pandas
+uvicorn
+fastapi
+pydantic
+rioxarray
+sqlalchemy

@@ -1,0 +1,27 @@
+# docker-compose.yml
+version: "3"
+
+services:
+  setup:
+    build: .
+    volumes:
+      - .:/app
+      - ./geotiff_folder:/app/geotiff_folder  # Mount GeoTIFF directory
+      - ./netcdf_folder:/app/netcdf_folder  # Mount netCDF directory
+    entrypoint: >
+      bash -c "python /app/setup.py"
+    restart: "no"
+
+  api:
+    build: .
+    depends_on:
+      - setup
+    volumes:
+      - .:/app
+      - ./geotiff_folder:/app/geotiff_folder  # Mount GeoTIFF directory
+      - ./netcdf_folder:/app/netcdf_folder  # Mount netCDF directory
+    container_name: fastapi_irysan
+    ports:
+      - "9000:8000"    # Map port 8000 of the container to port 8000 of the host
+    environment:
+      - DATABASE_URL=sqlite:///./test.db
